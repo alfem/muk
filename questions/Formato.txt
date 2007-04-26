@@ -1,0 +1,11 @@
+Los ficheros de preguntas deben comenzar por "q" seguidos de cualquier cosa. 
+
+Cada fichero contiene:
+Una línea con la pregunta.
+Tres líneas con tres posibles respuestas.
+Una línea con el número de la pregunta correcta
+
+Y eso es todo. 
+
+Si tienen caracteres internacionales (tildes, eñes) deben codificarse como UTF8.
+

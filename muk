@@ -1,0 +1,81 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
+# M.U.K. = Machaca un Keypad (Y haz cuatro con el)
+# Un Keypad normal tiene 12 botones. Si lo rompes y haces grupos de tres 
+# botones, puedes hacer cuatro mandos y jugar en grupo con este programa
+# Author: Alfonso E.M.
+# License: Free (GPL) 
+# Version: 1.0 - 8/Apr/2007
+
+import pygame
+import os,sys,base64
+import getopt
+
+# My first multifile python program !
+import Questions
+import Player
+import Tools 
+import Gui
+
+
+ 
+# MAIN INITIALIZATION
+
+def main():
+
+  dir='' 
+  num_players=4
+  num_questions=5
+  bonus_right_answer=1
+  bonus_first_answer=1
+  malus_wrong_answer=-1
+
+  try:
+    opts, args = getopt.getopt(sys.argv[1:],"hd:p:q:",["help","dir=","players=","questions="])
+  except getopt.GetoptError:
+    Tools.show_help()
+    sys.exit(2)
+
+  for opt, arg in opts:
+    if opt in ("-h", "--help"):
+      Tools.show_help()
+      sys.exit(0)                  
+    elif opt in ("-d", "--dir"):
+      dir = arg 
+    elif opt in ("-p", "--players"):
+      num_players = int(arg) 
+    elif opt in ("-q", "--questions"):
+      num_questions = int(arg) 
+
+
+  print "directory:",dir,"  players:",num_players," questions:",num_questions
+
+  player=[]
+  for n in range(num_players):
+    player.append(Player.Player())
+  questions=Questions.Questions(os.path.join('questions', dir))
+  gui=Gui.Gui()
+  
+
+# MAIN GENERAL GAME LOOP 
+  while 1:
+    gui.show_intro() 
+    for n in range(num_players):
+      player[n].score=0
+
+
+# MAIN ONE SET LOOP
+    for c in range(num_questions):
+      for n in range(num_players):
+        player[n].answer=0
+        questions.get_one()
+      gui.show_question(questions)
+      pygame.time.delay(50)
+      gui.wait_for_answers(player)
+      gui.show_result(player,questions)     
+
+    gui.show_end(player)    
+
+
+if __name__ == '__main__': main()
