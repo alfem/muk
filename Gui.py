@@ -146,13 +146,13 @@ class Gui:
 
 # JOYSTICK (SMASHED KEYPAD) SECTION            
          if self.js.get_button(0):
-               if player[0].set_answer(1):
+               if player[0].set_answer(3):
                  self.press_button(self.color3,self.player_pos[0])
          if self.js.get_button(3):
                if player[0].set_answer(2):
                  self.press_button(self.color2,self.player_pos[0])
          if self.js.get_button(1):
-               if player[0].set_answer(3):
+               if player[0].set_answer(1):
                  self.press_button(self.color1,self.player_pos[0])
                  
          if self.js.get_button(2):
@@ -172,17 +172,17 @@ class Gui:
                if player[2].set_answer(2):
                  self.press_button(self.color2,self.player_pos[2])
          if self.js.get_button(4):
-               if player[2].set_answer(2):
+               if player[2].set_answer(3):
                  self.press_button(self.color3,self.player_pos[2])
                
          if self.js.get_axis(1) > 0: 
-               if player[3].set_answer(2):
+               if player[3].set_answer(1):
                  self.press_button(self.color1,self.player_pos[3])
          if self.js.get_axis(0) < 0: 
                if player[3].set_answer(2):
                  self.press_button(self.color2,self.player_pos[3])
          if self.js.get_axis(1) < 0: 
-               if player[3].set_answer(2):
+               if player[3].set_answer(3):
                  self.press_button(self.color3,self.player_pos[3])
 
             
