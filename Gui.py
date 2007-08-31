@@ -11,7 +11,7 @@ class Gui:
   '''
   def __init__(self): 
     resolution=width,height=1024,768
-    self.player_pos=[127,376,625,873]
+    self.player_pos=[190,404,620,835]
 
     pygame.init()
     pygame.mouse.set_visible(0)
@@ -26,33 +26,38 @@ class Gui:
     self.snd_applause=Tools.load_sound("applause.wav")
 
     self.fnt_title = pygame.font.Font(None, 80)
-    self.fnt_clock = pygame.font.Font(None, 100)
-    self.fnt_question = pygame.font.Font(None, 40)
-    self.fnt_answer = pygame.font.Font(None, 35)
+    self.fnt_clock = pygame.font.Font(None, 160)
+    self.fnt_question = pygame.font.Font(None, 35)
+    self.fnt_answer = pygame.font.Font(None, 40)
     self.fnt_score = pygame.font.Font(None, 32)
 
     self.color1=(250,50,50)
     self.color2=(50,250,250)
     self.color3=(250,255,5)
 
-    self.background,bg_rect = Tools.load_image("boceto_fondo1.png")
+    self.background,bg_rect = Tools.load_image("pantalla_01b.jpg")
     self.endscreen,bg_rect = Tools.load_image("boceto_end.png")
     self.icon_ok,icon_ok_rect = Tools.load_image("ok.png",-1)
     self.icon_wrong,icon_ok_wrong = Tools.load_image("wrong.png",-1)
     self.scoreboard_area=bg_rect
     self.scoreboard_area.top=700
     
-    self.clockpos=(800,60)
+    self.clockpos=(815,75)
        
+    if pygame.joystick.get_count() > 0:
+       print "Joystick detectado!";
+       self.js=pygame.joystick.Joystick(0)
+       self.js.init()
+       print self.js.get_name()," axis:",self.js.get_numaxes()," buttons:",self.js.get_numbuttons()       
        
 # SHOW INTRO
   def show_intro(self):
 
     self.screen.blit(self.background, (0, 0))
    
-    text = self.fnt_title.render(unicode("¡ ATENCIÓN !!!",'utf-8'), 1, (250,200, 0))
+    text = self.fnt_title.render(unicode("¡ ATENCIÓN !!!",'utf-8'), 1, (225,180, 10))
 
-    self.screen.blit(text, (600,70))
+    self.screen.blit(text, (90,220))
     pygame.display.flip()
     self.snd_intro.play()
     pygame.time.delay(3000)
@@ -64,17 +69,18 @@ class Gui:
     self.screen.blit(self.background,(0,0),(0,0,1024,700))
     pygame.display.flip()
 
-    text = self.fnt_question.render(q.question, 1, (200, 200, 250))
-    textpos = text.get_rect(left=80,top=200)
+    text = self.fnt_question.render(q.question, 1, (0,0,0))
+    textpos = text.get_rect(left=90,top=230)
     self.screen.blit(text, textpos)
     text = self.fnt_answer.render(q.answer1, 1, self.color1)
-    textpos.top+=110
+    textpos.left+=85
+    textpos.top+=120
     self.screen.blit(text, textpos)
     text = self.fnt_answer.render(q.answer2, 1, self.color2)
-    textpos.top+=70
+    textpos.top+=78
     self.screen.blit(text, textpos)
     text = self.fnt_answer.render(q.answer3, 1, self.color3)
-    textpos.top+=70
+    textpos.top+=78
     self.screen.blit(text, textpos)
 
     pygame.display.flip()
@@ -84,7 +90,7 @@ class Gui:
   def wait_for_answers(self,player):
     pygame.event.clear()
     for seconds in range(5):
-       text = self.fnt_clock.render(str(seconds), 1, (250,250,250))
+       text = self.fnt_clock.render(str(seconds), 1, (0,0,0))
        clockarea=text.get_rect()
        self.screen.blit(text, self.clockpos)
        pygame.display.flip()
@@ -96,6 +102,8 @@ class Gui:
          event=pygame.event.poll()
          if event.type == QUIT:
               sys.exit(0)
+
+# KEYS SECTION
          if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                sys.exit(0)
@@ -135,6 +143,48 @@ class Gui:
             if event.key == K_QUOTE:
                if player[3].set_answer(3):
                  self.press_button(self.color3,self.player_pos[3])
+
+# JOYSTICK (SMASHED KEYPAD) SECTION            
+         if self.js.get_button(0):
+               if player[0].set_answer(1):
+                 self.press_button(self.color3,self.player_pos[0])
+         if self.js.get_button(3):
+               if player[0].set_answer(2):
+                 self.press_button(self.color2,self.player_pos[0])
+         if self.js.get_button(1):
+               if player[0].set_answer(3):
+                 self.press_button(self.color1,self.player_pos[0])
+                 
+         if self.js.get_button(2):
+               if player[1].set_answer(1):
+                 self.press_button(self.color1,self.player_pos[1])
+         if self.js.get_button(5):
+               if player[1].set_answer(2):
+                 self.press_button(self.color2,self.player_pos[1])
+         if self.js.get_button(7):
+               if player[1].set_answer(3):
+                 self.press_button(self.color3,self.player_pos[1])
+
+         if self.js.get_button(6):
+               if player[2].set_answer(1):
+                 self.press_button(self.color1,self.player_pos[2])
+         if self.js.get_axis(0) > 0: 
+               if player[2].set_answer(2):
+                 self.press_button(self.color2,self.player_pos[2])
+         if self.js.get_button(4):
+               if player[2].set_answer(2):
+                 self.press_button(self.color3,self.player_pos[2])
+               
+         if self.js.get_axis(1) > 0: 
+               if player[3].set_answer(2):
+                 self.press_button(self.color1,self.player_pos[3])
+         if self.js.get_axis(0) < 0: 
+               if player[3].set_answer(2):
+                 self.press_button(self.color2,self.player_pos[3])
+         if self.js.get_axis(1) < 0: 
+               if player[3].set_answer(2):
+                 self.press_button(self.color3,self.player_pos[3])
+
             
          elapsedtime=(pygame.time.get_ticks() - starttick ) / 1000
 
@@ -145,7 +195,7 @@ class Gui:
 
 # PRESS BUTTON  	
   def press_button(self,color,x):
-    rect=pygame.draw.circle(self.screen, color, (x,645), 44, 0)
+    rect=pygame.draw.circle(self.screen, color, (x,666), 36, 0)
     pygame.display.flip()
     self.snd_click.play()
    
@@ -161,16 +211,16 @@ class Gui:
       if player[i].answer == questions.rightanswer:
         player[i].score+=1
         self.snd_rightanswer.play()
-        self.screen.blit(self.icon_ok,(self.player_pos[i],615))
+        self.screen.blit(self.icon_ok,(self.player_pos[i]-25,625))
 # one negative point for a wrong answer
       else:
         if player[i].answer != 0:
           player[i].score-=1
-        self.screen.blit(self.icon_wrong,(self.player_pos[i],615))
+        self.screen.blit(self.icon_wrong,(self.player_pos[i]-25,625))
         self.snd_wronganswer.play()
 # and zero points for no answer
       text = self.fnt_score.render(str(player[i].score), 1, (200, 200, 250))
-      self.screen.blit(text, (self.player_pos[i],725))
+      self.screen.blit(text, (self.player_pos[i]+56,658))
       pygame.display.flip()
       pygame.time.delay(1000)
       
