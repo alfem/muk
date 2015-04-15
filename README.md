@@ -20,4 +20,4 @@ Jugador 4: L,P,'
 Para salir del juego, se pulsa ESC, y para comenzar otra partida, ESPACIO.
 
 Para jugar en condiciones, lo suyo es montar un 'tetramando'. Las
-instrucciones están en la web del proyecto, ¡con fotos incluidas!.
+instrucciones están en el wiki, ¡con fotos incluidas!.
